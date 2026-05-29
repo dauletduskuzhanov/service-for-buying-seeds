@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Закуп подсолнечника · МЭЗ Семей</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <div class="brand-mark">МЭЗ</div>
+        <div class="brand-text">
+          <div class="brand-title">Закуп подсолнечника</div>
+          <div class="brand-sub">г. Семей · ежедневный опрос КХ</div>
+        </div>
+      </div>
+      <nav class="tabs" id="tabs">
+        <button class="tab is-active" data-view="dashboard">Дашборд</button>
+        <button class="tab" data-view="farms">База КХ</button>
+        <button class="tab" data-view="settings">Настройки</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="main">
+    <!-- ===================== DASHBOARD ===================== -->
+    <section class="view" id="view-dashboard">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Сводка дня</h1>
+          <div class="page-date" id="todayLabel"></div>
+        </div>
+        <div class="head-actions">
+          <span class="survey-status" id="surveyStatus">опрос не запущен</span>
+          <button class="btn btn-ghost" id="btnSimulate" title="Демо: смоделировать входящие ответы фермеров">Симулировать ответы</button>
+          <button class="btn btn-primary" id="btnLaunch">Запустить опрос</button>
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div class="kpi-row" id="kpiRow"></div>
+
+      <!-- Blocks -->
+      <div class="grid">
+        <div class="card span-2" id="cardDistance">
+          <div class="card-head">
+            <h2>По расстоянию от завода</h2>
+            <span class="card-hint">объём и средняя цена по радиусам</span>
+          </div>
+          <div class="card-body" id="blockDistance"></div>
+        </div>
+
+        <div class="card" id="cardVolume">
+          <div class="card-head">
+            <h2>По количеству</h2>
+            <span class="card-hint">топ поставщиков дня</span>
+          </div>
+          <div class="card-body" id="blockVolume"></div>
+        </div>
+
+        <div class="card" id="cardQuality">
+          <div class="card-head">
+            <h2>По качеству</h2>
+            <span class="card-hint">категории и приёмочные нормы</span>
+          </div>
+          <div class="card-body" id="blockQuality"></div>
+        </div>
+
+        <div class="card span-2" id="cardPrice">
+          <div class="card-head">
+            <h2>По цене</h2>
+            <span class="card-hint">распределение и сравнение с целевой</span>
+          </div>
+          <div class="card-body" id="blockPrice"></div>
+        </div>
+      </div>
+
+      <!-- Detail table -->
+      <div class="card">
+        <div class="card-head">
+          <h2>Предложения дня</h2>
+          <div class="table-tools">
+            <input type="search" id="tableSearch" placeholder="Поиск по хозяйству…" />
+            <select id="tableFilter">
+              <option value="all">Все</option>
+              <option value="answered">Ответили</option>
+              <option value="waiting">Ждём ответ</option>
+              <option value="accept">Проходят по нормам</option>
+              <option value="reject">Не проходят</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table" id="offersTable">
+            <thead>
+              <tr>
+                <th data-sort="name">Хозяйство</th>
+                <th data-sort="distance" class="num">Расст., км</th>
+                <th data-sort="volume" class="num">Объём, т</th>
+                <th data-sort="quality">Качество</th>
+                <th data-sort="price" class="num">Цена, тг/т</th>
+                <th data-sort="status">Статус</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="offersBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FARMS ===================== -->
+    <section class="view is-hidden" id="view-farms">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">База хозяйств</h1>
+          <div class="page-date" id="farmsCount"></div>
+        </div>
+        <div class="head-actions">
+          <input type="search" id="farmSearch" placeholder="Поиск…" />
+          <button class="btn btn-primary" id="btnAddFarm">Добавить КХ</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-scroll">
+          <table class="data-table" id="farmsTable">
+            <thead>
+              <tr>
+                <th>Название</th>
+                <th>Контакт</th>
+                <th>WhatsApp</th>
+                <th>Нас. пункт</th>
+                <th class="num">Расст., км</th>
+                <th>Теги</th>
+                <th>Статус</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="farmsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SETTINGS ===================== -->
+    <section class="view is-hidden" id="view-settings">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Настройки закупа</h1>
+          <div class="page-date">целевая цена, нормы качества, координаты завода</div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="card-head"><h2>Целевая цена</h2></div>
+          <div class="card-body form-grid">
+            <label>Целевая цена, тг/т
+              <input type="number" id="setTargetPrice" />
+            </label>
+            <p class="muted">Предложения ниже целевой подсвечиваются зелёным в блоке «По цене».</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Приёмочные нормы качества</h2></div>
+          <div class="card-body form-grid two">
+            <label>Влажность ≤, %<input type="number" step="0.1" id="setMaxHum" /></label>
+            <label>Сорность ≤, %<input type="number" step="0.1" id="setMaxImp" /></label>
+            <label>Масличность ≥, %<input type="number" step="0.1" id="setMinOil" /></label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Завод (точка отсчёта)</h2></div>
+          <div class="card-body form-grid two">
+            <label>Широта<input type="number" step="0.0001" id="setPlantLat" /></label>
+            <label>Долгота<input type="number" step="0.0001" id="setPlantLon" /></label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Радиусы (км)</h2></div>
+          <div class="card-body form-grid">
+            <label>Границы диапазонов через запятую
+              <input type="text" id="setBands" placeholder="50, 100, 200" />
+            </label>
+            <p class="muted">Напр. «50, 100, 200» даёт радиусы 0–50, 50–100, 100–200, 200+.</p>
+          </div>
+        </div>
+      </div>
+      <div class="head-actions" style="justify-content:flex-end">
+        <button class="btn btn-ghost" id="btnResetData">Сбросить демо-данные</button>
+        <button class="btn btn-primary" id="btnSaveSettings">Сохранить</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== MODALS ===================== -->
+  <div class="modal-overlay is-hidden" id="modalOverlay">
+    <div class="modal" id="modalBox">
+      <div class="modal-head">
+        <h3 id="modalTitle">—</h3>
+        <button class="modal-close" id="modalClose">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+  <script src="seed.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
